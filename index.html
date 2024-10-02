@@ -8,20 +8,24 @@
 <body>
   <h1>Welcome to Rock Paper Scissors!</h1>
   <p>Choose an option to play. Press reset to start over!</p>
+
   <div class="score-container">
     <h2>Score</h2>
     <div class="scores">
       <p>Player: <span class="player-score">0</span></p>
-      <p>Computer: <span class="computer-score">0</span>
+      <p>Computer: <span class="computer-score">0</span></p>
     </div>
   </div>
+
   <div class="options-container">
-    <button class="rock">Rock</button>
-    <button class="paper">Paper</button>
-    <button class="scissors">Scissors</button>
+    <button class="choice" data-choice="Rock">Rock</button>
+    <button class="choice" data-choice="Paper">Paper</button>
+    <button class="choice" data-choice="Scissors">Scissors</button>
   </div>
+
   <div class="result"></div>
   <button class="reset">Reset</button>
+
   <script src="javascript.js"></script>
 </body>
 </html>

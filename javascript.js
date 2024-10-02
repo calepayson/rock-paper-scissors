@@ -1,67 +1,77 @@
-const playerScore = document.querySelector(".player-score");
-const computerScore = document.querySelector(".computer-score");
-const rock = document.querySelector(".rock");
-const paper = document.querySelector(".paper");
-const scissors = document.querySelector(".scissors");
-const result = document.querySelector(".result");
-const reset = document.querySelector(".reset");
+const playerScoreElement = document.querySelector(".player-score");
+const computerScoreElement = document.querySelector(".computer-score");
+const resultElement = document.querySelector(".result");
+const resetButton = document.querySelector(".reset");
+const choiceButtons = document.querySelectorAll(".choice");
 
+// Constants
+const CHOICES = ["Rock", "Paper", "Scissors"];
+
+// Game state variables
+let playerScore = 0;
+let computerScore = 0;
+
+// Function to get computer's random choice
 function getComputerChoice() {
-    const choices = ["Rock", "Paper", "Scissors"];
-    const item = Math.floor(Math.random() * choices.length);
-    return choices[item];
+    const randomIndex = Math.floor(Math.random() * CHOICES.length);
+    return CHOICES[randomIndex];
 }
 
+// Function to determine the winner
 function getWinner(playerChoice, computerChoice) {
     if (playerChoice === computerChoice) {
-        return "Tie"
-    } else if ((playerChoice === "Rock" && computerChoice === "Scissors") ||
-               (playerChoice === "Paper" && computerChoice === "Rock") ||
-               (playerChoice === "Scissors" && computerChoice === "Paper")) {
-        return "Player wins"
-    } else {
-        return "Computer wins"
+        return "Tie";
     }
+
+    const winConditions = {
+        Rock: "Scissors",
+        Paper: "Rock",
+        Scissors: "Paper",
+    };
+
+    return winConditions[playerChoice] === computerChoice ? "Player wins" : "Computer wins";
 }
 
-function printResult(winner, playerChoice, computerChoice) {
-    result.textContent = `${winner}! Player chose: ${playerChoice} and Computer chose ${computerChoice}.`
+// Function to display the results
+function displayResult(winner, playerChoice, computerChoice) {
+    resultElement.textContent = `${winner}! Player chose: ${playerChoice} and Computer chose ${computerChoice}.`
 }
 
+// Function to update the scores
 function updateScores(winner) {
     if (winner === "Player wins") {
-        playerScore.textContent = parseInt(playerScore.textContent) + 1;
+        playerScore++;
+        playerScoreElement.textContent = playerScore;
     } else if (winner === "Computer wins") {
-        computerScore.textContent = parseInt(computerScore.textContent) + 1;
+        computerScore++;
+        computerScoreElement.textContent = computerScore++;
     }
 }
 
-function play(playerChoice) {
+// Main game function
+function playRound(playerChoice) {
     const computerChoice = getComputerChoice();
     const winner = getWinner(playerChoice, computerChoice);
-    printResult(winner, playerChoice, computerChoice);
+    displayResult(winner, playerChoice, computerChoice);
     updateScores(winner);
 }
 
-function choseRock() {
-    play("Rock");
-}
+// Event listeners for choice buttons
+choiceButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        const playerChoice = button.dataset.choice;
+        playRound(playerChoice);
+    });
+});
 
-function chosePaper() {
-    play("Paper");
-}
+// Event listener for reset button
+resetButton.addEventListener("click", resetGame);
 
-function choseScissors() {
-    play("Scissors");
+// Function to reset game
+function resetGame() {
+    playerScore = 0;
+    computerScore = 0;
+    playerScoreElement.textContent = playerScore;
+    computerScoreElement.textContent = computerScore;
+    resultElement.textContent = ""
 }
-
-function resetScore() {
-    computerScore.textContent = 0;
-    playerScore.textContent = 0;
-    result.textContent = "";
-}
-
-rock.addEventListener("click", choseRock);
-paper.addEventListener("click", chosePaper);
-scissors.addEventListener("click", choseScissors);
-reset.addEventListener("click", resetScore);
